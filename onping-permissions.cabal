@@ -25,9 +25,11 @@ Library
                        ,lens <= 3.9
                        ,persistent
                        ,text 
+                       ,blaze-svg >= 0.3.3.1                       
                        ,pretty                  
                        ,fgl                     
                        ,diagrams
+                       ,diagrams-lib
                        ,diagrams-svg
                        ,containers
                        ,warp
