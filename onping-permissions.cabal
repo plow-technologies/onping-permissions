@@ -14,7 +14,7 @@ Library
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
   Exposed-Modules:      Permissions.Onping      
-                        Permissions.Onping.Types
+--                        Permissions.Onping.Types
                         Permissions.Onping.Interface
                         Permissions.Onping.Graph
   Other-Modules:        Permissions.Onping.Internal
@@ -22,6 +22,7 @@ Library
 
                       , persist-mongo-template >= 0.3.3
                        ,aeson
+                       ,onping-permission-types
                        ,lens <= 3.9
                        ,persistent
                        ,text 
