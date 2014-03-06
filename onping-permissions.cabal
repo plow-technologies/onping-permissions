@@ -17,22 +17,24 @@ Library
                         Permissions.Onping.Types
                         Permissions.Onping.Interface
                         Permissions.Onping.Graph
-                        
   Other-Modules:        Permissions.Onping.Internal
   Build-Depends:        base >= 4 && < 5
 
-                      , persist-mongo-template >= 0.2.5
-                       ,graphviz               >= 2999.16.0.0    
+                      , persist-mongo-template >= 0.3.3
                        ,aeson
+                       ,lens <= 3.9
                        ,persistent
-                       ,text
+                       ,text 
                        ,pretty                  
                        ,fgl                     
+                       ,diagrams
+                       ,diagrams-svg
                        ,containers
                        ,warp
                        ,http-types
                        ,yaml
                        ,wai
+                       ,bytestring
 
   
 Test-Suite spec
@@ -56,6 +58,7 @@ Test-Suite spec
                        ,warp
                        ,http-types
                        ,wai
+                       ,bytestring
 
 
 Source-Repository head

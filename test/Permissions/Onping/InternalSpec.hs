@@ -10,6 +10,8 @@ import Control.Applicative
 import qualified Data.Yaml as Y
 import Data.Traversable
 import Data.Maybe
+
+
 main :: IO ()
 main = do 
  hspec $ spec 

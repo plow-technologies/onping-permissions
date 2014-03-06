@@ -1,6 +1,6 @@
-module Permissions.Onping.Internal
+module Permissions.Onping.Internal 
     (
-getSuperUserList
+getSuperUserList,getAllEntitites
     ) where
 
 import Control.Applicative
@@ -14,7 +14,7 @@ import qualified Data.List as L
 
 
 -- | filterSuperUserList is extracted from Onping, modified to return the SuperUser Tree of any user
-
+-- The first function here, getSuperUserList... Does nothing more than gather every possible entity
 getSuperUserList :: UserId -> IO  [OnPingPermissionEntity]
 getSuperUserList uid = do  
   aidG <- runDB $ do 
@@ -25,7 +25,15 @@ getSuperUserList uid = do
     return $ l
   filterSuperUserList' uid  $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
 
-
+getAllEntitites :: IO [OnPingPermissionEntity]
+getAllEntitites = do 
+  aidG <- runDB $ do 
+    l <- selectList [] [] 
+    return $ l
+  aidU <- runDB $ do
+    l <- selectList [] []
+    return $ l
+  return $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
 
 
 
@@ -34,9 +42,9 @@ filterSuperUserList' aid peList =  do
   peListSeed <- runDB $ do
                   (Just uTag) <- selectFirst [UserTagUser ==. (aid)] []  
                   (Just gTag) <- selectFirst [GroupId ==. (userTagGroup.entityVal $ uTag)] [] -- Default user grp
-                  egids  <- selectList [GroupUserJoinUId ==. aid] []-- other user grps
-                  grps   <- selectList [GroupId <-. (groupUserJoinGId.entityVal  <$> egids)] [] 
-                  return $ [PEuser uTag, PEgroup gTag] ++ (PEgroup <$> grps)
+--                  egids  <- selectList [GroupUserJoinUId ==. aid] []-- other user grps
+--                  grps   <- selectList [GroupId <-. (groupUserJoinGId.entityVal  <$> egids)] [] 
+                  return $ [PEuser uTag, PEgroup gTag] -- ++ (PEgroup <$> grps)
   return $ (superListMaker peListSeed ) L.\\ peListSeed -- subtracting out 1 instance of each, if overlap occurs so be it
     where 
          superListMaker :: [PermissionEntity (Entity UserTag) (Entity Group)] -> [(PermissionEntity (Entity UserTag)  (Entity Group))]
