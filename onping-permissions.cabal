@@ -6,6 +6,7 @@ License:                BSD3
 License-File:           LICENSE
 -- Synopsis:               
 -- Description:            
+
 Cabal-Version:          >= 1.10
 Build-Type:             Simple
 
