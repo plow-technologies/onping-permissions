@@ -25,9 +25,9 @@ getSuperUserList uid = do
     return $ l
   filterSuperUserList' uid  $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
 
-getAllEntitites :: IO [OnPingPermissionEntity]
-getAllEntitites = do 
-  aidG <- runDB $ do 
+getAllEntitites :: MongoDBConf -> IO [OnPingPermissionEntity]
+getAllEntitites mdbc = do 
+  aidG <- runDBConf mdbc $ do 
     l <- selectList [] [] 
     return $ l
   aidU <- runDB $ do

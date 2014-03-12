@@ -76,18 +76,18 @@ decodeAKey :: AKey -> Maybe OnpingPermissionKey
 decodeAKey (AKey a) = decode a
                       
 -- | Creates a map to the index of the node in the svg 
-constructPermissionNodeMap ::  IO (PermissionMap, [OnPingPermissionEntity])
-constructPermissionNodeMap = do 
-  ul <- getAllEntitites
+constructPermissionNodeMap ::  MongoDBConf -> IO (PermissionMap, [OnPingPermissionEntity])
+constructPermissionNodeMap mdbc = do 
+  ul <- getAllEntitites mdbc
   let emptyNodeMap = M.empty :: M.Map AKey OPNode 
       zNodes = zip ([1 ..] :: [Integer] ) ul
       nodeMap = foldl  (\m (v,k)  -> M.insert (makeAKey k) (permissionEntityToNode k v) m ) emptyNodeMap zNodes
   return (nodeMap,ul )
 
 
-constructPermissionGraph :: IO OnPingPermissionGraphViz
-constructPermissionGraph = do 
-  (pm,opnLst) <- constructPermissionNodeMap 
+constructPermissionGraph :: MongoDBConf -> IO OnPingPermissionGraphViz
+constructPermissionGraph mdbc = do 
+  (pm,opnLst) <- constructPermissionNodeMap mdbc
   let edgeList = S.toList $ L.foldl' (\s on  -> S.union (makeOnPingPermissionEdgeList pm on) s ) S.empty opnLst :: [LEdge () ]
       nodeList = M.elems pm :: [OPNode]
   return $ (mkGraph nodeList edgeList ) 
@@ -102,9 +102,9 @@ constructPermissionGraphFromMap pm opnLst = do
   return $ (mkGraph nodeList edgeList ) 
 
 
-constructPartialGraph :: OnPingPermissionEntity -> IO OnPingPermissionGraphViz
-constructPartialGraph  _ = do 
-  (pm,opnLst) <- constructPermissionNodeMap 
+constructPartialGraph :: MongoDBConf -> OnPingPermissionEntity -> IO OnPingPermissionGraphViz
+constructPartialGraph mdbc  _ = do 
+  (pm,opnLst) <- constructPermissionNodeMap mdbc
   pg <- constructPermissionGraphFromMap pm opnLst
   return pg
       
