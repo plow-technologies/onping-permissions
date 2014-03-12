@@ -1,0 +1,14 @@
+#Dynamic-Report information
+dynHost: "127.0.0.1"
+dynPort: "9134"
+managerPort: "10502"
+remotePort: "10501"
+#nodeStatus is either NodeMaster, NodeSlave, or NodeDebug
+#nodeStatus:: NodeDebug
+nodeStatus: NodeDebug
+#nodeStatus: NodeSlave
+
+#Mongo db config informatiom
+host: "localhost" 
+db: "onping_production"
+port: 27017

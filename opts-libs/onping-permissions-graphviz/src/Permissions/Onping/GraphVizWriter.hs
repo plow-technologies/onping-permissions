@@ -31,9 +31,9 @@ import Data.GraphViz.Printing
 import Data.GraphViz.Attributes.Complete
 
 
-writeGraphViz :: IO ()
-writeGraphViz = do
-  pg <- constructPermissionGraph
+writeGraphViz :: MongoDBConf -> IO ()
+writeGraphViz mdbc = do
+  pg <- constructPermissionGraph mdbc
   let    gtd =  graphToDot (goodDefaults) pg
          str =  renderDot.toDot $ gtd
   TIO.writeFile "autograph.gv" $  str  
@@ -42,7 +42,7 @@ writeGraphViz = do
 permissionUserLabel :: forall a. Show a => a -> [Attribute]
 permissionUserLabel u = [Label $ StrLabel (TL.pack.show $ u) , nodeFontSize
                          , FillColor clearColor, Shape Circle, clearStyle ]
-    where clearColor = [(RGB 74 212 125 ) ]
+    where clearColor = [WC (RGB 74 212 125 ) Nothing ]
           clearStyle = Style [SItem Filled []]
 
 
@@ -72,7 +72,7 @@ goodDefaults = defaultParams {
 
 labelEdge :: forall t t1. t -> t1 -> [Attribute]
 labelEdge _ _ = [Color penColorBlack, PenWidth epenWidth, ArrowSize arrowSize]
-  where penColorBlack = [(RGB 0 0 0) ]
+  where penColorBlack = [WC (RGB 0 0 0) Nothing]
 --        penColorGreen  = [WC (RGB 74 212 125) Nothing]
 --        penColorRed    = [WC (RGB 217 4 54) Nothing]
 --        penColorLightG = [WC (RGB 48 8 158) Nothing]
@@ -91,7 +91,7 @@ nodeFontSize = FontSize 10.0
 permissionGroupLabel :: T.Text -> [Attribute]
 permissionGroupLabel g = [Label $ StrLabel (TL.fromStrict $ g) , nodeFontSize
                          , FillColor clearColor, Shape Circle, clearStyle ]
-    where clearColor = [(RGB 74 212 125 ) ]
+    where clearColor = [WC (RGB 74 212 125 ) Nothing ]
           clearStyle = Style [SItem Filled []]
 
 
