@@ -15,31 +15,31 @@ import qualified Data.List as L
 
 -- | filterSuperUserList is extracted from Onping, modified to return the SuperUser Tree of any user
 -- The first function here, getSuperUserList... Does nothing more than gather every possible entity
-getSuperUserList :: UserId -> IO  [OnPingPermissionEntity]
-getSuperUserList uid = do  
-  aidG <- runDB $ do 
+getSuperUserList :: MongoDBConf -> UserId -> IO  [OnPingPermissionEntity]
+getSuperUserList mdbc uid = do  
+  aidG <- runDBConf mdbc $ do 
     l <- selectList [] [] 
     return $ l
-  aidU <- runDB $ do
+  aidU <- runDBConf mdbc $ do
     l <- selectList [] []
     return $ l
-  filterSuperUserList' uid  $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
+  filterSuperUserList' mdbc uid  $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
 
 getAllEntitites :: MongoDBConf -> IO [OnPingPermissionEntity]
 getAllEntitites mdbc = do 
   aidG <- runDBConf mdbc $ do 
     l <- selectList [] [] 
     return $ l
-  aidU <- runDB $ do
+  aidU <- runDBConf mdbc $ do
     l <- selectList [] []
     return $ l
   return $ (PEgroup <$> aidG) ++ (PEuser <$> aidU) -- Complete list of all UserTags and Groups
 
 
 
-filterSuperUserList' :: UserId -> [PermissionEntity (Entity UserTag) (Entity Group)] -> IO [(PermissionEntity (Entity UserTag)  (Entity Group))]
-filterSuperUserList' aid peList =  do
-  peListSeed <- runDB $ do
+filterSuperUserList' :: MongoDBConf -> UserId -> [PermissionEntity (Entity UserTag) (Entity Group)] -> IO [(PermissionEntity (Entity UserTag)  (Entity Group))]
+filterSuperUserList' mdbc aid peList =  do
+  peListSeed <- runDBConf mdbc $ do
                   (Just uTag) <- selectFirst [UserTagUser ==. (aid)] []  
                   (Just gTag) <- selectFirst [GroupId ==. (userTagGroup.entityVal $ uTag)] [] -- Default user grp
 --                  egids  <- selectList [GroupUserJoinUId ==. aid] []-- other user grps

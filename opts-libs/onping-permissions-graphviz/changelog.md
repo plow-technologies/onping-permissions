@@ -11,11 +11,11 @@ Change Log
 
 *For complete history please view commit log*
 
-##Current Version  0.1.1
+##Current Version  0.1.2
 --------------------------	
 
 
-### Proposed Release 0.1.2
+### Proposed Release 0.1.3
 ----------------------------
 
 
@@ -23,7 +23,7 @@ Change Log
 *Change History* 
 
 + 0.1.2
-
+  updated onping-permissions-core dependency to 0.1.2
 + 0.1.1
   updated graphviz dependency , graphviz == 2999.16.0.0
 
